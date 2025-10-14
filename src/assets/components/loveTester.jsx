@@ -51,17 +51,30 @@ const MemorizedButton = memo(Button);
 function LoveTester() {
   // 1. useState (The core counter)
   const [actsOfKindness, setActsOfKindness] = useState(0);
+  // New state to hold the text input for the act of kindness
+  const [currentAct, setCurrentAct] = useState("");
   
   // Secondary state (used only to force the component to re-render for memo/useMemo testing)
   const [secondaryState, setSecondaryState] = useState(0); 
   
   console.log("Render LoveTester Component");
 
-  // 3. useCallback (Memoized Function)
+  // Handler for text input change
+  const handleInputChange = useCallback((e) => {
+    setCurrentAct(e.target.value);
+  }, []);
+
+  // 3. useCallback (Memoized Function) - Now handles the log act and clearing the input
   const handleLogAct = useCallback(() => {
-    setActsOfKindness((prev) => prev + 1);
-    console.log("🔥 useCallback: Logged Act of Kindness");
-  }, []); // Empty dependency array means the function definition never changes
+    if (currentAct.trim() !== "") {
+      setActsOfKindness((prev) => prev + 1);
+      console.log(`🔥 useCallback: Logged Act of Kindness: "${currentAct}"`);
+      // Clear the input field after logging
+      setCurrentAct("");
+    } else {
+      console.log("🚫 Cannot log empty act.");
+    }
+  }, [currentAct]); // Dependency array includes currentAct so the function uses the latest value
 
   // Standard handler for secondary state
   const handleForceRerender = () => {
@@ -103,6 +116,17 @@ function LoveTester() {
         </p>
       </div>
 
+      {/* Input Field for Act of Kindness */}
+      <div className="mb-4">
+        <input
+          type="text"
+          value={currentAct}
+          onChange={handleInputChange}
+          placeholder="What specific act of kindness did your partner do?"
+          className="input-field"
+        />
+      </div>
+
       {/* Affirmation Display (memo) */}
       <MemorizedAffirmationDisplay staticMessage="A relationship is built on consistent, small acts." />
 
@@ -118,6 +142,10 @@ function LoveTester() {
           Force App Re-render (Test Memo)
         </Button>
       </div>
+      
+      <p className="text-xs text-gray-400 text-center mt-4">
+          (Check console to see which components and calculations run.)
+      </p>
     </div>
   );
 }
