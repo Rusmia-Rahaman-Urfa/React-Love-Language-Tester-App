@@ -114,7 +114,7 @@ border: 2px solid #ec4899;
 box-shadow: inset 0 0 15px rgba(236, 72, 153, 0.3);
 }
 
-.affirmation-box {
+.display-box {
 padding: 1.25rem;
 background-color: #1e293b;
 border: 1px solid #ec4899;
@@ -125,7 +125,7 @@ margin-bottom: 1.5rem;
 box-shadow: 0 0 8px rgba(236, 72, 153, 0.2);
 }
 
-.affirmation-text {
+.display-text {
 font-size: 0.95rem;
 font-weight: 500;
 color: #f472b6;
